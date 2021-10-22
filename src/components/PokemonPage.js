@@ -8,18 +8,28 @@ class PokemonPage extends React.Component {
 
     state = {
       pokemons: [],
+      search: ""
     }
-
 
     componentDidMount() {
       fetch("http://localhost:3000/pokemon")
       .then(resp => resp.json())
       .then(pokemons => {
-          // console.log(pokemons)
+          console.log(pokemons)
           this.setState({pokemons})
           // console.log(pokemons)
       })
     }
+
+    onType = (e) => {
+        this.setState({[e.target.name]: e.target.value})
+    }
+
+
+    onSearch = () => {
+     return this.state.pokemons.filter(pokemon => pokemon.name.includes(this.state.search))
+    }
+
 
 
   render() {
@@ -29,9 +39,9 @@ class PokemonPage extends React.Component {
         <br />
         <PokemonForm />
         <br />
-        <Search />
+        <Search onType={this.onType}/>
         <br />
-        <PokemonCollection  pokemons={this.state.pokemons}/>
+        <PokemonCollection  pokemonsArray={this.onSearch()}/>
       </Container>
     )
   }
